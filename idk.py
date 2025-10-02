@@ -60,7 +60,6 @@ def main():
             time.sleep(0.05)  # slow down for readability
 
         # Once we exhaust this batch, increase precision and continue
-        global PRECISION
         PRECISION += 1000
         decimal.getcontext().prec = PRECISION + 5
 
