@@ -42,4 +42,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: pi-result
-        path: pi.txt
+        path: pi_digits.txt
