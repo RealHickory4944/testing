@@ -3,7 +3,8 @@ import time
 import os
 
 # How many digits to compute in one batch
-global PRECISION = 2000
+global PRECISION
+PRECISION = 2000
 decimal.getcontext().prec = PRECISION + 5
 
 SAVE_FILE = "pi_digits.txt"
