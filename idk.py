@@ -2,9 +2,9 @@ import decimal
 import time
 import os
 
-# Set precision for Decimal calculations
-PRECISION = 1000  # how many digits you want to generate
-decimal.getcontext().prec = PRECISION + 5  # a little extra buffer
+# How many digits to compute in one batch
+PRECISION = 2000
+decimal.getcontext().prec = PRECISION + 5
 
 SAVE_FILE = "pi_digits.txt"
 
@@ -42,20 +42,27 @@ def save_state(pi_digits):
 def main():
     n_digits, pi_digits = load_state()
 
-    # Compute pi once to high precision
-    pi_str = str(compute_pi(PRECISION))
-    pi_str = pi_str.replace(".", "")  # remove decimal point
+    while True:
+        # Compute a fresh batch of digits
+        pi_str = str(compute_pi(PRECISION)).replace(".", "")
 
-    if n_digits == 0:
-        print("3.", end="", flush=True)
+        # If starting fresh, print "3."
+        if n_digits == 0:
+            print("3.", end="", flush=True)
 
-    while n_digits < len(pi_str) - 1:
-        next_digit = pi_str[n_digits + 1]  # +1 because index 0 is "3"
-        print(next_digit, end="", flush=True)
-        pi_digits += next_digit
-        save_state(pi_digits)  # write after every digit
-        n_digits += 1
-        time.sleep(0.05)  # slow down for readability
+        # Output digits one by one
+        while n_digits < len(pi_str) - 1:
+            next_digit = pi_str[n_digits + 1]  # +1 skips the "3"
+            print(next_digit, end="", flush=True)
+            pi_digits += next_digit
+            save_state(pi_digits)  # write after every digit
+            n_digits += 1
+            time.sleep(0.05)  # slow down for readability
+
+        # Once we exhaust this batch, increase precision and continue
+        global PRECISION
+        PRECISION += 1000
+        decimal.getcontext().prec = PRECISION + 5
 
 if __name__ == "__main__":
     main()
